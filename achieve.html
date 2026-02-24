@@ -30,7 +30,7 @@ h1{
 .jar-container{
   margin:40px auto;
   width:clamp(220px,50vw,360px);
-  aspect-ratio:3/4;
+  aspect-ratio: 5 / 4;
   border:5px solid #ff8fab;
   border-radius:40px;
   background:white;
@@ -44,6 +44,11 @@ canvas{
   left:0;
 }
 
+.wrapper p,
+.emoji-list{
+  text-align:left;
+}
+
 #progressText{
   color:#ff6f91;
   margin-top:15px;
@@ -52,7 +57,10 @@ canvas{
 .emojis{
   margin-top:20px;
 }
-
+.emoji-list {
+  list-style: none;
+  padding-left: 0;   /* removes left spacing */
+}
 button{
   font-size:clamp(20px,5vw,26px);
   margin:5px;
@@ -68,6 +76,20 @@ button:disabled{
   opacity:0.5;
 }
 
+.reset-btn{
+  background:white;
+  border:3px dashed #ff8fab;
+  color:#ff6f91;
+  border-radius:20px;
+  padding:6px 16px;
+  font-size:20px;
+  transition:0.2s;
+}
+
+.reset-btn:hover{
+  background:#ffeef3;
+}
+
 #celebration{
   display:none;
   margin-top:20px;
@@ -80,7 +102,17 @@ button:disabled{
 
 <div class="wrapper">
 <h1>✨ My Achievement Jar ✨</h1>
-<p>Fill this jar with your wins — big or small 💖</p>
+ <p >First of all, I'm soo happy and proud of u!! Idk wht u have achieved (come and yap all about it to me rn!!) oh waitttt before that... I hv a small jar for u to fill... 
+  Fill it with all ur Achievements no matter big or small... </p>     
+<ul class="emoji-list">
+  <li>🩷 did smthn creative</li>
+  <li>🌷 felt pretty after putting makeup</li>
+  <li>🪻 finally did smthn u hv been puttin off for soo long</li>
+  <li>🕯️ exm went good</li>
+  <li>🎡 did smthn u r proud of</li>
+  <li>🍨 let urself rest with no guilt</li>
+</ul>
+ <p>Drop your wins into the jar 💖</p>
 
 <div class="jar-container" id="jar"></div>
 
@@ -89,16 +121,16 @@ button:disabled{
 <div class="emojis">
   <button onclick="dropEmoji('🩷')">🩷</button>
   <button onclick="dropEmoji('🌷')">🌷</button>
-  <button onclick="dropEmoji('💧')">💧</button>
-  <button onclick="dropEmoji('🧘‍♀️')">🧘‍♀️</button>
-  <button onclick="dropEmoji('🌟')">🌟</button>
-  <button onclick="dropEmoji('🌅')">🌅</button>
+  <button onclick="dropEmoji('🪻')">🪻</button>
+  <button onclick="dropEmoji('🕯️')">🕯️</button>
+  <button onclick="dropEmoji('🎡')">🎡</button>
+  <button onclick="dropEmoji('🍨')">🍨</button>
 </div>
 
 <div id="celebration">
 🎉 YOU FILLED THE JAR!! Screenshot this 💖  
 <br>
-<button onclick="resetJar()">Reset</button>
+<button class="reset-btn" onclick="resetJar()">Fill it again 🫶</button>
 </div>
 </div>
 
