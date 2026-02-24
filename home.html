@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open When 💌</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(180deg, #ffb3d9 0%, #d6b3ff 50%, #b3e5ff 100%);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+  background: white;
+  width: 100%;
+  max-width: 380px;
+
+  max-height: 90vh;          /* 👈 THIS is the key */
+  overflow-y: auto;          /* scroll inside card */
+
+  border-radius: 24px;
+  padding: 24px 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  text-align: center;
+  position: relative;
+
+  -webkit-overflow-scrolling: touch; /* smooth mobile scroll */
+}
+
+/* hide scrollbar but keep scroll */
+.container::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    .open-when {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      position: relative;
+      z-index: 2; /* keep cards above emojis */
+    }
+
+    a.card {
+      text-decoration: none;
+      padding: 16px;
+      border-radius: 18px;
+      background: #ffeaf1;
+      color: #333;
+      font-size: 1rem;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #888;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Floating emoji */
+    .float-emoji {
+      position: absolute;
+      font-size: 20px;
+      cursor: pointer;
+      user-select: none;
+      z-index: 1; /* behind cards */
+      animation: fadeEmoji var(--life) ease-in-out forwards;
+    }
+
+    @keyframes fadeEmoji {
+      0% { opacity: 0; transform: scale(0.7); }
+      15% { opacity: 1; transform: scale(1); }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: scale(0.85); }
+    }
+
+    .popup {
+      pointer-events: none;
+      position: absolute;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      animation: popMessage 3s forwards;
+      z-index: 5;
+      transform: translate(-50%, -110%);
+      white-space: nowrap;
+    }
+
+    @keyframes popMessage {
+      0% { opacity: 0; transform: translate(-50%, -90%) scale(0.6); }
+      15% { opacity: 1; transform: translate(-50%, -120%) scale(1.05); }
+      25% { transform: translate(-50%, -120%) scale(1); }
+      85% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -110%) scale(0.9); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Open When 💌</h1>
+    <p class="subtitle">For the days you need me, even when I’m not right there.</p>
+
+    <div class="open-when">
+        <a class="card" href="happy.html">Open when u r happy </a>
+        <a class="card" href="loved.html">Open when u feel loved</a>
+        <a class="card" href="achieve.html">Open when u have achieved something</a>
+        <a class="card" href="studysesh.html">Open when u hv completed a long study session</a>
+      <a class="card" href="sad.html">Open when u r sad </a>    
+      <a class="card" href="fam.html">Open when ur fam pisses u off</a>
+      <a class="card" href="exm.html">Open when ur exms r frying ur brain</a>
+      <a class="card" href="insecure.html">Open when u feel insecure </a>
+      <a class="card" href="doubt.html">Open when u r doubting urself</a>
+      <a class="card" href="break.html">Open when u need a break </a>
+      <a class="card" href="sick.html">Open when u r sick</a>      
+      <a class="card" href="surprise.html">Open for a surprise</a>
+      <a class="card" href="gayu.html">Open when u need to know how much i love u</a>
+      
+ 
+
+    </div>
+
+    <div class="footer">Made with all my love 💖</div>
+  </div>
+
+<script>
+  const emojiMessages = {
+    "💗": [
+      "I love you 💕",
+      "You are so deeply loved 💖",
+      "🧿🧿🧿", 
+      "I'm sooo glad you exist 🪄",
+      "Take care of yourself 🦋",
+      "🫂🫂🫂"
+    ],
+    "✨": [
+      "You’re doing better than you think ✨",
+      "Hi pretty ✨",
+      "Hi cutooo 🥺",
+      "🩷💙💜",
+      "💛🧡❤️💚",
+      "kuchipuchi"
+      
+    ],
+    "⭐": [
+      "One step at a time, okay? ⭐",
+      "You are doing so good already",
+      "Don't be soo hard on yourself",
+      "I believe in you 😌",
+      "I'm so proud of your efforts 🌱"
+    ]
+  };
+
+  const emojis = ['💗','✨','⭐'];
+  const container = document.querySelector('.container');
+
+  function spawnEmoji() {
+    const el = document.createElement('div');
+    el.className = 'float-emoji';
+
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    el.textContent = emoji;
+
+    const life = Math.floor(Math.random() * 3000) + 7000; // 7–10s
+    el.style.setProperty('--life', life + 'ms');
+
+    const rect = container.getBoundingClientRect();
+    // avoid edges + avoid card area
+    const padding = 16;
+    const cards = document.querySelector('.open-when');
+    const cardTop = cards.offsetTop;
+    const cardBottom = cardTop + cards.offsetHeight;
+
+    let x, y;
+    do {
+      x = Math.random() * (rect.width - 30 - padding * 2) + padding;
+      y = Math.random() * (rect.height - 30 - padding * 2) + padding;
+    } while (y > cardTop - 20 && y < cardBottom + 20);
+
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+
+    el.onclick = (e) => {
+      e.stopPropagation();
+
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      const list = emojiMessages[emoji];
+      popup.textContent = list[Math.floor(Math.random() * list.length)];
+
+      // smart popup positioning (never clipped)
+      const popupWidth = 180;
+      const popupHeight = 42;
+
+      let px = el.offsetLeft;
+      let py = el.offsetTop - popupHeight - 8;
+
+      if (px + popupWidth > rect.width) px = rect.width - popupWidth - 12;
+      if (px < 12) px = 12;
+      if (py < 12) py = el.offsetTop + 28;
+
+      popup.style.left = px + 'px';
+      popup.style.top = py + 'px';
+
+      container.appendChild(popup);
+      el.remove();
+
+      setTimeout(() => popup.remove(), 3000);
+    };
+
+    container.appendChild(el);
+    setTimeout(() => el.remove(), life);
+  }
+
+  // slower + calmer
+  setInterval(spawnEmoji, 9000);
+</script>
+
+</body>
+</html>

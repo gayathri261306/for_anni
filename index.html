@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just one thing 💗</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(180deg, #ffb3d9 0%, #d6b3ff 50%, #b3e5ff 100%);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .intro {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .center-text {
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #222;
+      z-index: 5;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards;
+      animation-delay: 1s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .scatter {
+      position: absolute;
+      font-size: 0.95rem;
+      color: #333;
+      opacity: 0;
+      animation: appear 1s ease forwards;
+    }
+
+    .scatter{
+    max-width:40%;
+    text-align:center;
+}
+
+    @keyframes appear {
+      to { opacity: 1; }
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 24px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(0,0,0,0.45);
+      opacity: 0;
+      animation: fadeIn 1.2s ease forwards;
+      animation-delay: 6s;
+    }
+  </style>
+</head>
+<body>
+
+<div class="intro" id="intro">
+  <div class="center-text">this is for u 💗</div>
+  <div class="hint">double tap anywhere to skip ✨</div>
+</div>
+
+<script>
+  const intro = document.getElementById('intro');
+
+  const pieces = [
+    // keep everything WELL away from center text
+    { text: "for the days", x: "8%", y: "12%", delay: 1800 },
+    { text: "u feel a lot", x: "72%", y: "14%", delay: 2600 },
+    { text: "n dont know", x: "10%", y: "62%", delay: 3400 },
+    { text: "i hope this", x: "25%", y: "82%", delay: 5000 },
+    { text: "feels like me", x: "62%", y: "78%", delay: 5800 }
+  ];
+
+  pieces.forEach(p => {
+    const span = document.createElement('div');
+    span.className = 'scatter';
+    span.textContent = p.text;
+    span.style.left = p.x;
+    span.style.top = p.y;
+    span.style.transform = "translate(-50%, -50%)";
+    span.style.animationDelay = p.delay + 'ms';
+    intro.appendChild(span);
+  });
+
+  let lastTap = 0;
+  intro.addEventListener('touchend', () => {
+    const now = new Date().getTime();
+    if (now - lastTap < 300) {
+      window.location.href = 'index.html';
+    }
+    lastTap = now;
+  });
+
+  intro.addEventListener('dblclick', () => {
+    window.location.href = 'index.html';
+  });
+</script>
+
+</body>
+</html>

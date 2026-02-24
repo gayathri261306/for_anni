@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achievement Jar</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Patrick Hand',cursive;
+  background:linear-gradient(to bottom,#fffdfc,#ffeef3);
+  text-align:center;
+  color:#444;
+}
+
+.wrapper{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+h1{
+  color:#ff6f91;
+  font-size:clamp(24px,5vw,40px);
+}
+
+.jar-container{
+  margin:40px auto;
+  width:clamp(220px,50vw,360px);
+  aspect-ratio:3/4;
+  border:5px solid #ff8fab;
+  border-radius:40px;
+  background:white;
+  position:relative;
+  overflow:hidden;
+}
+
+canvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+#progressText{
+  color:#ff6f91;
+  margin-top:15px;
+}
+
+.emojis{
+  margin-top:20px;
+}
+
+button{
+  font-size:clamp(20px,5vw,26px);
+  margin:5px;
+  padding:8px 12px;
+  border:none;
+  border-radius:14px;
+  background:white;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+button:disabled{
+  opacity:0.5;
+}
+
+#celebration{
+  display:none;
+  margin-top:20px;
+  color:#ff3e6c;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+<h1>✨ My Achievement Jar ✨</h1>
+<p>Fill this jar with your wins — big or small 💖</p>
+
+<div class="jar-container" id="jar"></div>
+
+<div id="progressText">0% Filled</div>
+
+<div class="emojis">
+  <button onclick="dropEmoji('🩷')">🩷</button>
+  <button onclick="dropEmoji('🌷')">🌷</button>
+  <button onclick="dropEmoji('💧')">💧</button>
+  <button onclick="dropEmoji('🧘‍♀️')">🧘‍♀️</button>
+  <button onclick="dropEmoji('🌟')">🌟</button>
+  <button onclick="dropEmoji('🌅')">🌅</button>
+</div>
+
+<div id="celebration">
+🎉 YOU FILLED THE JAR!! Screenshot this 💖  
+<br>
+<button onclick="resetJar()">Reset</button>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+const { Engine, Render, World, Bodies, Runner } = Matter;
+
+const jar = document.getElementById("jar");
+const progressText = document.getElementById("progressText");
+const celebration = document.getElementById("celebration");
+const buttons = document.querySelectorAll(".emojis button");
+
+let progress = 0;
+
+function initPhysics(){
+
+  const width = jar.clientWidth;
+  const height = jar.clientHeight;
+
+  const engine = Engine.create();
+  engine.world.gravity.y = 1.2;
+  const world = engine.world;
+
+  const render = Render.create({
+    element: jar,
+    engine: engine,
+    options:{
+      width:width,
+      height:height,
+      wireframes:false,
+      background:'transparent'
+    }
+  });
+
+  Render.run(render);
+  Runner.run(Runner.create(), engine);
+
+  // WALLS (perfectly matching rectangle jar)
+  const thickness = 50;
+
+  const ground = Bodies.rectangle(width/2, height+thickness/2, width, thickness, { isStatic:true });
+  const leftWall = Bodies.rectangle(-thickness/2, height/2, thickness, height, { isStatic:true });
+  const rightWall = Bodies.rectangle(width+thickness/2, height/2, thickness, height, { isStatic:true });
+
+  World.add(world,[ground,leftWall,rightWall]);
+
+  return {engine,world,width,height};
+}
+
+let physics = initPhysics();
+
+function dropEmoji(symbol){
+  if(progress >= 100) return;
+
+  progress += 5;
+  if(progress > 100) progress = 100;
+
+  const { world, width } = physics;
+
+  // dynamic size based on jar width
+  const radius = width * 0.08;
+
+  const x = Math.random() * (width - radius*2) + radius;
+
+  const emoji = Bodies.circle(x, -30, radius, {
+    restitution:0.15,
+    friction:0.9,
+    frictionAir:0.03,
+    density:0.003,
+    render:{
+      sprite:{
+        texture:createEmojiTexture(symbol, radius*2),
+        xScale:1,
+        yScale:1
+      }
+    }
+  });
+
+  World.add(world, emoji);
+
+  updateProgress();
+
+  if(progress === 100) celebrate();
+}
+
+function createEmojiTexture(symbol,size){
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  ctx.font = size*0.8 + "px serif";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText(symbol,size/2,size/2);
+  return canvas.toDataURL();
+}
+
+function updateProgress(){
+  progressText.innerText = progress + "% Filled";
+}
+
+function celebrate(){
+  celebration.style.display="block";
+  buttons.forEach(btn=>btn.disabled=true);
+
+  confetti({
+    particleCount:180,
+    spread:90,
+    origin:{y:0.6}
+  });
+}
+
+function resetJar(){
+  location.reload();
+}
+
+// Reinitialize on resize (fully responsive)
+window.addEventListener("resize",()=>{
+  jar.innerHTML="";
+  physics = initPhysics();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Letter 💗</title>
+
+  <!-- handwriting font -->
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      margin:0;
+      font-family:'Patrick Hand',cursive;
+      background:#fffdfc;
+      height:100vh;
+      overflow:hidden;
+    }
+
+    .book{
+      width:100%;
+      max-width:430px;
+      height:100vh;
+      margin:auto;
+      position:relative;
+      perspective:1600px;
+    }
+
+    .page{
+      position:absolute;
+      inset:0;
+      background:#fffdfc;
+      transform-origin:left;
+      transition:transform 0.95s ease;
+      backface-visibility:hidden;
+      overflow:hidden;
+    }
+
+    /* notebook lines */
+    .page::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,182,218,0.22),
+          rgba(255,182,218,0.22) 1px,
+          transparent 1px,
+          transparent 32px
+        );
+      pointer-events:none;
+    }
+
+    /* margin line */
+    .page::after{
+      content:"";
+      position:absolute;
+      top:0;
+      left:52px;
+      width:2px;
+      height:100%;
+      background:rgba(255,160,200,0.35);
+      pointer-events:none;
+    }
+
+    .content{
+      position:relative;
+      z-index:2;
+      padding:60px 28px 80px 78px;
+      font-size:1.25rem;
+      line-height:2.2;
+      color:#222;
+      white-space:pre-line;
+    }
+
+    /* page flip */
+    .page.flipped{
+      transform:rotateY(-180deg);
+      box-shadow:-20px 0 40px rgba(0,0,0,0.12);
+    }
+
+    /* Page 2 stays hidden until flip */
+    #p2{
+      transform:rotateY(180deg);
+    }
+
+    .hint{
+      position:absolute;
+      bottom:18px;
+      right:22px;
+      font-size:0.95rem;
+      opacity:0.5;
+      z-index:10;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="book">
+
+  <!-- Page 1 -->
+  <div class="page" id="p1">
+    <div class="content">
+hi love, 
+
+
+    </div>
+
+    <div class="hint">swipe →</div>
+  </div>
+
+
+  <!-- Page 2 (leave empty if not needed) -->
+  <div class="page" id="p2">
+    <div class="content">
+
+    </div>
+
+    <div class="hint">← swipe</div>
+  </div>
+
+</div>
+
+
+<script>
+  const p1 = document.getElementById("p1");
+  const p2 = document.getElementById("p2");
+
+  let flipped = false;
+  let startX = 0;
+
+  // check if page 2 has text
+  function hasSecondPage(){
+    return p2.innerText.trim() !== "";
+  }
+
+  function nextPage(){
+    if(!hasSecondPage()) return; // no flip if only 1 page
+    if(!flipped){
+      p1.classList.add("flipped");
+      flipped = true;
+    }
+  }
+
+  function prevOrHome(){
+    if(!hasSecondPage()){
+      window.location.href = "index.html";
+      return;
+    }
+
+    if(flipped){
+      p1.classList.remove("flipped");
+      flipped = false;
+    }else{
+      window.location.href = "index.html";
+    }
+  }
+
+  /* 📱 Swipe gestures */
+  document.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  document.addEventListener("touchend", (e) => {
+    let endX = e.changedTouches[0].clientX;
+    let diff = endX - startX;
+
+    if(diff < -60) nextPage();      // swipe left
+    if(diff > 60) prevOrHome();     // swipe right
+  });
+
+  /* 💻 Laptop testing */
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "ArrowLeft") nextPage();
+    if(e.key === "ArrowRight") prevOrHome();
+  });
+
+  document.addEventListener("click", (e) => {
+    if(e.clientX > window.innerWidth/2){
+      nextPage();
+    }else{
+      prevOrHome();
+    }
+  });
+</script>
+
+</body>
+</html>

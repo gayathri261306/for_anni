@@ -1,0 +1,206 @@
+<!-- Open when u need a break (Checklist + Timer + Confetti) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Break time!!</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family: "Poppins", sans-serif;
+      background:#fff6fb;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+    }
+
+    .page{
+      width:90%;
+      max-width:420px;
+      background:white;
+      padding:30px;
+      border-radius:25px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.12);
+      text-align:center;
+    }
+
+    h2{
+      margin-top:0;
+      color:#ff5fa2;
+      font-size:24px;
+    }
+
+    .checklist{
+      text-align:left;
+      margin-top:20px;
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    label{
+      background:#ffe6f1;
+      padding:12px 15px;
+      border-radius:15px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:16px;
+    }
+
+    label {
+  user-select: none;
+}
+
+    input[type="checkbox"]{
+      width:18px;
+      height:18px;
+      accent-color:#ff5fa2;
+    }
+
+    /* Timer box */
+    .timer{
+      margin-top:25px;
+      padding:15px;
+      border-radius:18px;
+      background:#fdf0f7;
+    }
+
+    #time{
+      font-size:22px;
+      font-weight:bold;
+      color:#ff5fa2;
+    }
+
+    button{
+      margin-top:10px;
+      padding:10px 18px;
+      border:none;
+      border-radius:15px;
+      background:#ff5fa2;
+      color:white;
+      font-size:15px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      opacity:0.9;
+    }
+
+    #doneMsg{
+      display:none;
+      margin-top:25px;
+      font-size:18px;
+      color:#ff5fa2;
+      font-weight:600;
+    }
+
+    /* Confetti sparkle */
+    .sparkle{
+      position:fixed;
+      top:-10px;
+      font-size:20px;
+      animation:fall 2s linear forwards;
+      pointer-events:none;
+    }
+
+    @keyframes fall{
+      to{
+        transform:translateY(110vh);
+        opacity:0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+    <h2>take a tiny break for me 💗</h2>
+
+
+    <!-- Checklist -->
+    <div class="checklist">
+      <label><input type="checkbox"> hug and pat yourself</label>
+      <label><input type="checkbox"> get up for a second</label>
+      <label><input type="checkbox"> stretch and smile</label>
+      <label><input type="checkbox"> drink a glass of water</label>
+      <label><input type="checkbox"> take a 5 min break</label>
+    </div>
+
+    <!-- Timer -->
+    <div class="timer">
+      <p>5 minute reset timer ⏳</p>
+      <div id="time">05:00</div>
+      <button onclick="startTimer()">Start</button>
+    </div>
+
+    <!-- Done message -->
+    <div id="doneMsg">🎉 yayy!! i’m proud of u 💗</div>
+  </div>
+
+  <script>
+    // Checklist + Confetti
+    const boxes = document.querySelectorAll("input[type=checkbox]");
+    const doneMsg = document.getElementById("doneMsg");
+
+    boxes.forEach(box => {
+      box.addEventListener("change", () => {
+        const allChecked = [...boxes].every(b => b.checked);
+
+        if(allChecked){
+          doneMsg.style.display = "block";
+          launchConfetti();
+        }
+      });
+    });
+
+    function launchConfetti(){
+      for(let i=0;i<35;i++){
+        let piece = document.createElement("div");
+        piece.className = "sparkle";
+        piece.innerHTML = "✨";
+        piece.style.left = Math.random()*100 + "vw";
+        piece.style.animationDuration = (1.5 + Math.random()) + "s";
+        document.body.appendChild(piece);
+
+        setTimeout(()=>piece.remove(),2000);
+      }
+    }
+
+    // Timer
+    let timerRunning = false;
+
+    function startTimer(){
+      if(timerRunning) return;
+      timerRunning = true;
+
+      let total = 300; // 5 minutes
+      const display = document.getElementById("time");
+
+      const interval = setInterval(()=>{
+        let min = Math.floor(total/60);
+        let sec = total % 60;
+
+        display.textContent =
+          String(min).padStart(2,"0") + ":" + String(sec).padStart(2,"0");
+
+        total--;
+
+        if(total < 0){
+          clearInterval(interval);
+          timerRunning = false;
+          display.innerText = "Done 💗";
+        }
+      },1000);
+    }
+  </script>
+
+</body>
+</html>
+
+

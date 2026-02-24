@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mystery Comfort Box ✨</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#fffdfc;
+  font-family:'Patrick Hand', cursive;
+}
+
+/* 🔲 GRID */
+.grid{
+  width:min(90vw, 90dvh * 3 / 5);
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:12px;
+}
+
+/* 📦 SQUARE BOX */
+.box{
+  aspect-ratio:1 / 1;  /* 👈 forces square */
+  background:#f8d7e0;
+  border-radius:18px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  transition:0.25s ease;
+  font-size:1.8rem;
+}
+.box:hover{
+  transform:scale(1.05);
+}
+
+/* 🔒 Locked state */
+.grid.locked .box{
+  opacity:0.6;
+}
+
+/* 🌫 POPUP */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  visibility:hidden;
+}
+
+.popup-content{
+  background:white;
+  padding:25px;
+  border-radius:22px;
+  max-width:320px;
+  text-align:center;
+  animation:fadeIn 0.2s ease;
+}
+
+.popup img{
+  max-width:100%;
+  border-radius:15px;
+}
+
+.close{
+  margin-top:12px;
+  cursor:pointer;
+  font-size:0.95rem;
+  opacity:0.7;
+}
+
+@keyframes fadeIn{
+  from{ transform:scale(0.9); opacity:0; }
+  to{ transform:scale(1); opacity:1; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid" id="grid"></div>
+
+<div class="popup" id="popup">
+  <div class="popup-content" id="popupContent"></div>
+</div>
+
+<script>
+const images = [
+  "images/1975.jpg",
+  "images/bhai.png",
+  "images/coke.png",
+  "images/cow.jpg",
+  "images/dad.png",
+  "images/heart.jpg",
+  "images/jfk.jpg",
+  "images/anne.jpg",
+  "images/puppy.jpg",
+  "images/roses.jpg",
+  "images/saturn.jpg",
+  "images/ts.jpg",
+  "images/tslover.jpg",
+  "images/bunny.png",
+  "images/doggo.png"
+];
+
+// Shuffle
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+}
+shuffle(images);
+
+const grid = document.getElementById("grid");
+let alreadyOpened = false;
+
+// Create boxes
+images.forEach((imgSrc)=>{
+  const box=document.createElement("div");
+  box.className="box";
+  box.innerText="?";
+
+  box.onclick=()=>{
+    if(alreadyOpened){
+      showDoneMessage();
+      return;
+    }
+
+    alreadyOpened = true;
+    openPopup(imgSrc);
+    grid.classList.add("locked");
+  };
+
+  grid.appendChild(box);
+});
+
+// Open image popup
+function openPopup(imgSrc){
+  const popup=document.getElementById("popup");
+  const content=document.getElementById("popupContent");
+
+  content.innerHTML = `
+    <img src="${imgSrc}">
+    <div class="close" onclick="closePopup()">close</div>
+  `;
+
+  popup.style.visibility="visible";
+}
+
+// Show "done" popup
+function showDoneMessage(){
+  const popup=document.getElementById("popup");
+  const content=document.getElementById("popupContent");
+
+  content.innerHTML = `
+    <div style="font-size:1.2rem;">
+      Nahh you’re done 😌✨<br><br>
+      Only one comfort box allowed rn💗
+    </div>
+    <div class="close" onclick="closePopup()">okayyy</div>
+  `;
+
+  popup.style.visibility="visible";
+}
+
+function closePopup(){
+  document.getElementById("popup").style.visibility="hidden";
+}
+</script>
+
+</body>
+</html>
