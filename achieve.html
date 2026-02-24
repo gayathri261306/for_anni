@@ -64,7 +64,7 @@ canvas{
 button{
   font-size:clamp(20px,5vw,26px);
   margin:5px;
-  padding:8px 12px;
+  padding:8px 9px;
   border:none;
   border-radius:14px;
   background:white;
@@ -137,6 +137,9 @@ button:disabled{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <script>
 const { Engine, Render, World, Bodies, Runner } = Matter;
 
@@ -146,6 +149,7 @@ const celebration = document.getElementById("celebration");
 const buttons = document.querySelectorAll(".emojis button");
 
 let progress = 0;
+let drops = []; // ✅ ADDED
 
 function initPhysics(){
 
@@ -170,7 +174,6 @@ function initPhysics(){
   Render.run(render);
   Runner.run(Runner.create(), engine);
 
-  // WALLS (perfectly matching rectangle jar)
   const thickness = 50;
 
   const ground = Bodies.rectangle(width/2, height+thickness/2, width, thickness, { isStatic:true });
@@ -190,11 +193,16 @@ function dropEmoji(symbol){
   progress += 5;
   if(progress > 100) progress = 100;
 
+  drops.push(symbol); // ✅ SAVE SYMBOL
+
+  localStorage.setItem("jarData", JSON.stringify({ // ✅ SAVE STATE
+    progress: progress,
+    drops: drops
+  }));
+
   const { world, width } = physics;
 
-  // dynamic size based on jar width
   const radius = width * 0.08;
-
   const x = Math.random() * (width - radius*2) + radius;
 
   const emoji = Bodies.circle(x, -30, radius, {
@@ -216,6 +224,30 @@ function dropEmoji(symbol){
   updateProgress();
 
   if(progress === 100) celebrate();
+}
+
+// ✅ FUNCTION TO RESTORE SAVED EMOJIS
+function dropSavedEmoji(symbol){
+  const { world, width } = physics;
+
+  const radius = width * 0.08;
+  const x = Math.random() * (width - radius*2) + radius;
+
+  const emoji = Bodies.circle(x, -30, radius, {
+    restitution:0.15,
+    friction:0.9,
+    frictionAir:0.03,
+    density:0.003,
+    render:{
+      sprite:{
+        texture:createEmojiTexture(symbol, radius*2),
+        xScale:1,
+        yScale:1
+      }
+    }
+  });
+
+  World.add(world, emoji);
 }
 
 function createEmojiTexture(symbol,size){
@@ -246,13 +278,41 @@ function celebrate(){
 }
 
 function resetJar(){
+  localStorage.removeItem("jarData"); // ✅ CLEAR STORAGE
   location.reload();
 }
 
-// Reinitialize on resize (fully responsive)
+// ✅ RESTORE ON PAGE LOAD
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("jarData");
+
+  if(saved){
+    const data = JSON.parse(saved);
+
+    progress = data.progress || 0;
+    drops = data.drops || [];
+
+    updateProgress();
+
+    drops.forEach(symbol=>{
+      dropSavedEmoji(symbol);
+    });
+
+    if(progress >= 100){
+      celebrate();
+    }
+  }
+});
+
+// Reinitialize on resize
 window.addEventListener("resize",()=>{
   jar.innerHTML="";
   physics = initPhysics();
+
+  // ✅ RE-DRAW EMOJIS AFTER RESIZE
+  drops.forEach(symbol=>{
+    dropSavedEmoji(symbol);
+  });
 });
 </script>
 
