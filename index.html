@@ -101,15 +101,16 @@
   intro.addEventListener('touchend', () => {
     const now = new Date().getTime();
     if (now - lastTap < 300) {
-      window.location.href = 'index.html';
+      window.location.href = 'home.html';
     }
     lastTap = now;
   });
 
   intro.addEventListener('dblclick', () => {
-    window.location.href = 'index.html';
+    window.location.href = 'home.html';
   });
 </script>
 
 </body>
 </html>
+
