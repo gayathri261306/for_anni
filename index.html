@@ -71,7 +71,7 @@
 
 <div class="intro" id="intro">
   <div class="center-text">this is for u 💗</div>
-  <div class="hint">double tap anywhere to skip ✨</div>
+  <div class="hint">tap anywhere to continue ✨</div>
 </div>
 
 <script>
@@ -97,20 +97,12 @@
     intro.appendChild(span);
   });
 
-  let lastTap = 0;
-  intro.addEventListener('touchend', () => {
-    const now = new Date().getTime();
-    if (now - lastTap < 300) {
-      window.location.href = 'home.html';
-    }
-    lastTap = now;
-  });
-
-  intro.addEventListener('dblclick', () => {
-    window.location.href = 'home.html';
-  });
+  intro.addEventListener('click', () => {
+  window.location.href = 'home.html';
+});
 </script>
 
 </body>
 </html>
+
 
