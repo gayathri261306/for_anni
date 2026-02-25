@@ -71,7 +71,7 @@
 
 <div class="intro" id="intro">
   <div class="center-text">this is for u 💗</div>
-  <div class="hint">tap anywhere to continue ✨</div>
+  <div class="hint">double tap anywhere to skip ✨</div>
 </div>
 
 <script>
@@ -79,9 +79,8 @@
 
   const pieces = [
     // keep everything WELL away from center text
-    { text: "for the days", x: "8%", y: "12%", delay: 1800 },
+    { text: "for the days", x: "15%", y: "12%", delay: 1800 },
     { text: "u feel a lot", x: "72%", y: "14%", delay: 2600 },
-    { text: "n dont know", x: "10%", y: "62%", delay: 3400 },
     { text: "i hope this", x: "25%", y: "82%", delay: 5000 },
     { text: "feels like me", x: "62%", y: "78%", delay: 5800 }
   ];
@@ -97,12 +96,19 @@
     intro.appendChild(span);
   });
 
-  intro.addEventListener('click', () => {
-  window.location.href = 'home.html';
-});
+  let lastTap = 0;
+  intro.addEventListener('touchend', () => {
+    const now = new Date().getTime();
+    if (now - lastTap < 300) {
+      window.location.href = 'home.html';
+    }
+    lastTap = now;
+  });
+
+  intro.addEventListener('dblclick', () => {
+    window.location.href = 'home.html';
+  });
 </script>
 
 </body>
 </html>
-
-
