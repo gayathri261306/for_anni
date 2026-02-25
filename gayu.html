@@ -1,136 +1,73 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Letter 💗</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letter 💗</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 
-  <style>
-   body{
-  margin:0;
-  font-family:'Patrick Hand',cursive;
-  background:#fffdfc;
-  /* remove height & overflow hidden */
-  min-height: 100vh;
-  overflow-y: auto;  /* allow scrolling */
-}
+<style>
+  body{
+    margin:0;
+    font-family:'Patrick Hand',cursive;
+    background:#fffdfc;
+  }
 
-/* Notebook page */
-.page{
-  width:100%;
-  /* remove height 100vh */
-  background:#fffdfc;
-  position:relative;
-  overflow: visible; /* content can expand */
-}
+  .page{
+    min-height:100vh;
+    max-width:600px;
+    margin:auto;
+    padding:60px 28px 80px 78px;
+    font-size:1.25rem;
+    line-height:2.2;
+    color:#222;
+    position:relative;
+    box-sizing:border-box;
+  }
 
-/* notebook lines remain the same */
-.page::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255,182,218,0.22),
-      rgba(255,182,218,0.22) 1px,
-      transparent 1px,
-      transparent 32px
-    );
-  pointer-events:none;
-}
+  /* notebook lines */
+  .page::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255,182,218,0.22),
+        rgba(255,182,218,0.22) 1px,
+        transparent 1px,
+        transparent 32px
+      );
+    pointer-events:none;
+  }
 
-.page::after{
-  content:"";
-  position:absolute;
-  top:0;
-  left:52px;
-  width:2px;
-  height:100%;
-  background:rgba(255,160,200,0.35);
-  pointer-events:none;
-}
+  /* margin line */
+  .page::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:52px;
+    width:2px;
+    height:100%;
+    background:rgba(255,160,200,0.35);
+    pointer-events:none;
+  }
 
-/* Letter text */
-.content{
-  position:relative;
-  z-index:2;
-  padding:70px 28px 100px 78px;
-  font-size:1.35rem;
-  line-height:2.2;
-  color:#222;
-  white-space:pre-line;
-}
-
-    .page{
-  width:100%;
-  max-height:100vh;
-  overflow-y:auto;  /* scroll inside page */
-}
-
-
-
-
-
-    
-    
-    /* Sneaky hint */
-    .psst{
-  font-size:0.9rem;
-  opacity:0.45;
-  margin-top:4px;
-  margin-bottom:0px;
-}
-
-
-
-    .heart-btn{
-  font-size:1.9rem;
-  margin-left:6px;
-  cursor:pointer;
-  user-select:none;
-}
-
-
-    .heart-btn:hover{
-      transform:scale(1.15);
-    }
-
-    /* Playing glow animation */
-    .heart-btn.playing{
-      animation:pulseGlow 1s infinite ease-in-out;
-      filter:drop-shadow(0 0 8px rgba(255,105,180,0.65));
-    }
-
-    @keyframes pulseGlow{
-      0%   { transform:scale(1); opacity:0.85; }
-      50%  { transform:scale(1.35); opacity:1; }
-      100% { transform:scale(1); opacity:0.85; }
-    }
-
-    /* Hide ugly audio player */
-    audio{
-      display:none;
-    }
-
-    /* tiny swipe hint */
-    .hint{
-      position:absolute;
-      bottom:18px;
-      right:22px;
-      font-size:0.95rem;
-      opacity:0.45;
-    }
-  </style>
+  .content{
+    position:relative;
+    z-index:2;
+    white-space:pre-line;
+  }
+</style>
 </head>
 
 <body>
 
 <div class="page">
-
   <div class="content">
+Hi loveee,
 This is to remind you how much I love you!!!
 hehe
 Having you as a part of my life makes me so happy, you know that?? A “hiii” message from you and I’m all grinning. Just a pic of you doing your goofy grump kitty expressions is enough to make my whole day. I always look forward to your yaps, doodles, and memes.
@@ -138,74 +75,14 @@ Do you even realize how freakin’ precious you are, you woman??!!!
 Your presence makes my life so much better. I can’t wait to meet you, aaaahhhhhhhh (it’s on my 2026–27 bucket list!!).
 Tbh… I don’t know what else to say. All I know is that I love you. So, so, sooooooo muchhhhh.
 hehe
-      <div>
-  <span class="heart-btn" id="heart">💗</span>
-  <div class="psst">psst… tap it</div>
-</div>
 Always take care of yourself, alright?? Keep shining.
 I LOVE YOU!!!!!!!! 💗
 <img src="hug.png">
-
   </div>
-
-
-
-  
-
-  <!-- Audio file -->
-  <audio id="voice" src="gayu.m4a"></audio>
-
-  
-
 </div>
-
-<script>
-  const heart = document.getElementById("heart");
-  const voice = document.getElementById("voice");
-
-  // Tap heart → play/pause
-  heart.addEventListener("click", () => {
-
-    if(voice.paused){
-      voice.play();
-      heart.classList.add("playing");
-    }else{
-      voice.pause();
-      heart.classList.remove("playing");
-    }
-  });
-
-  // Stop glow when audio ends
-  voice.addEventListener("ended", () => {
-    heart.classList.remove("playing");
-  });
-
-
-  // Swipe right → back to main page
-  let startX = 0;
-
-  document.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  });
-
-  document.addEventListener("touchend", (e) => {
-    let endX = e.changedTouches[0].clientX;
-    let diff = endX - startX;
-
-    if(diff > 80){
-      window.location.href = "index.html";
-    }
-  });
-
-  // Laptop testing: ArrowRight
-  document.addEventListener("keydown", (e) => {
-    if(e.key === "ArrowRight"){
-      window.location.href = "index.html";
-    }
-  });
-</script>
 
 </body>
 </html>
+
 
 
